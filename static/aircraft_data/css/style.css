@@ -1,0 +1,146 @@
+/* Reset and base styles */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f7fa;
+    line-height: 1.6;
+    color: #2c3e50;
+}
+
+/* Header styles */
+h1 {
+    color: #2c3e50;
+    text-align: center;
+    padding: 30px 20px;
+    margin: 0;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Table styles */
+table {
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Table header */
+th {
+    background-color: #3498db;
+    color: white;
+    padding: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+th:first-child {
+    border-top-left-radius: 8px;
+}
+
+th:last-child {
+    border-top-right-radius: 8px;
+}
+
+/* Table cells */
+td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e1e8f0;
+}
+
+/* Table row effects */
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:last-child td:first-child {
+    border-bottom-left-radius: 8px;
+}
+
+tr:last-child td:last-child {
+    border-bottom-right-radius: 8px;
+}
+
+tr:hover {
+    background-color: #f8fafc;
+    transition: background-color 0.2s ease;
+}
+
+tr:nth-child(even) {
+    background-color: #f8fafc;
+}
+
+/* Links */
+a {
+    text-decoration: none;
+    color: #3498db;
+    transition: color 0.2s ease;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+a:hover {
+    color: #2980b9;
+    background-color: #edf2f7;
+}
+
+/* Action buttons */
+.action-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 5px;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.edit-btn {
+    background-color: #3498db;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #2980b9;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+    color: white;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    table {
+        width: 95%;
+        margin: 20px auto;
+    }
+
+    th, td {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .action-btn {
+        padding: 6px 12px;
+    }
+}

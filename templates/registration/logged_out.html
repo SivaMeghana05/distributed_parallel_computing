@@ -1,0 +1,19 @@
+{% extends 'aircraft_data/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h4>Logged Out</h4>
+                </div>
+                <div class="card-body">
+                    <p>You have been successfully logged out.</p>
+                    <a href="{% url 'login' %}" class="btn btn-primary">Login Again</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

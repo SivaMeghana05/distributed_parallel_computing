@@ -1,0 +1,48 @@
+{% load static %}
+{% extends 'aircraft_data/base.html' %}
+
+{% block content %}
+<div class="logout-container">
+    <h2>Successfully Logged Out</h2>
+    <p class="message">Thank you for using our application. You have been safely logged out.</p>
+    <a href="{% url 'login' %}" class="login-link">Log In Again</a>
+</div>
+
+<style>
+    .logout-container {
+        text-align: center;
+        background: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 90%;
+        margin: 50px auto;
+    }
+
+    h2 {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+
+    .login-link {
+        display: inline-block;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+    .login-link:hover {
+        background-color: #45a049;
+    }
+
+    .message {
+        color: #666;
+        margin-bottom: 25px;
+    }
+</style>
+{% endblock %}

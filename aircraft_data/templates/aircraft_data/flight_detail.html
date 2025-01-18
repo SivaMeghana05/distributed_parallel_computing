@@ -1,0 +1,89 @@
+{% extends 'aircraft_data/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2>Flight Details: {{ flight.flight_number }}</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Flight Info Card -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Flight Information</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <th>Aircraft:</th>
+                            <td>{{ flight.aircraft.model }}</td>
+                        </tr>
+                        <tr>
+                            <th>From:</th>
+                            <td>{{ flight.departure_location }}</td>
+                        </tr>
+                        <tr>
+                            <th>To:</th>
+                            <td>{{ flight.arrival_location }}</td>
+                        </tr>
+                        <tr>
+                            <th>Departure:</th>
+                            <td>{{ flight.departure_time }}</td>
+                        </tr>
+                        <tr>
+                            <th>Altitude:</th>
+                            <td>{{ flight.current_altitude|default:"--" }} ft</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Card -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Flight Path</h5>
+                </div>
+                <div class="card-body">
+                    <div id="map" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize map
+    var map = L.map('map');
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Get flight coordinates
+    var latitude = parseFloat('{{ flight.current_latitude|default:"0" }}');
+    var longitude = parseFloat('{{ flight.current_longitude|default:"0" }}');
+    
+    // Add flight marker if coordinates exist
+    if (latitude !== 0 && longitude !== 0) {
+        var marker = L.marker([latitude, longitude]);
+        marker.bindPopup('{{ flight.flight_number }}');
+        marker.addTo(map);
+        
+        // Center map on marker
+        map.setView([latitude, longitude], 8);
+    } else {
+        // Default view if no coordinates
+        map.setView([20.5937, 78.9629], 4);
+    }
+</script>
+{% endblock %}
