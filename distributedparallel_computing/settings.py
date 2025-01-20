@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'apscheduler',
     'accounts',
     'rest_framework',
+    'primary_server_app',
 ]
 
 MIDDLEWARE = [
