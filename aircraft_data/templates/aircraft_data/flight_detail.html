@@ -11,6 +11,10 @@
     <div class="row mb-4">
         <div class="col-md-12">
             <h2>Flight Details: {{ flight.flight_number }}</h2>
+            <p>From: {{ flight.departure_location }}</p>
+            <p>To: {{ flight.arrival_location }}</p>
+            <p>Departure: {{ flight.departure_time }}</p>
+            <p>Altitude: {{ flight.current_altitude }} ft</p>
         </div>
     </div>
 
@@ -61,6 +65,9 @@
         </div>
     </div>
 </div>
+
+<h2>Flight Details</h2>
+<p>This is a test to see if the template loads.</p>
 
 <script>
     // Initialize map

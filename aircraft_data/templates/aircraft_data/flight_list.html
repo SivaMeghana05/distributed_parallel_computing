@@ -1,0 +1,19 @@
+<table>
+    <tr>
+        <th>Flight Number</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    {% for flight in flights %}
+    <tr>
+        <td>{{ flight.flight_number }}</td>
+        <td>{{ flight.get_status_display }}</td>  <!-- This will show 'Active' or 'Inactive' -->
+        <td><a href="{% url 'flight_detail' flight.id %}">View Details</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+<form method="GET" action="">
+    <input type="text" name="q" placeholder="Search flights..." />
+    <button type="submit">Search</button>
+</form> 
