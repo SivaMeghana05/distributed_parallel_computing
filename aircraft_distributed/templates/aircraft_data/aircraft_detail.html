@@ -1,0 +1,87 @@
+{% extends 'aircraft_data/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2>Aircraft Details: {{ aircraft.aircraft_id }}</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Aircraft Info -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Aircraft Information</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <th>Model:</th>
+                            <td>{{ aircraft.model }}</td>
+                        </tr>
+                        <tr>
+                            <th>Manufacturer:</th>
+                            <td>{{ aircraft.manufacturer }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status:</th>
+                            <td>
+                                <span class="badge {% if aircraft.status == 'active' %}bg-success{% elif aircraft.status == 'maintenance' %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ aircraft.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Last Updated:</th>
+                            <td>{{ aircraft.last_updated }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flight History -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Flight History</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Flight Number</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Departure Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for flight in flights %}
+                                <tr>
+                                    <td>{{ flight.flight_number }}</td>
+                                    <td>{{ flight.departure_location }}</td>
+                                    <td>{{ flight.arrival_location }}</td>
+                                    <td>{{ flight.departure_time }}</td>
+                                    <td>
+                                        <a href="{% url 'aircraft_data:flight_detail' flight.pk %}" class="btn btn-sm btn-primary">View</a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No flights recorded</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

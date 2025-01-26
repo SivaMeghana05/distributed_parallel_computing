@@ -1,0 +1,154 @@
+{% extends 'aircraft_data/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Status Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Aircraft</h5>
+                    <h2>23</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Active Flights</h5>
+                    <h2>22</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Routes</h5>
+                    <h2>{{ flight_stats.total_routes }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Aircraft in Maintenance</h5>
+                    <h2>7</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map and Flight List -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Live Flight Tracking</h5>
+                </div>
+                <div class="card-body">
+                    <div id="map" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Active Flights</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Flight</th>
+                                    <th>Route</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for flight in flights %}
+                                <tr>
+                                    <td>{{ flight.flight_number }}</td>
+                                    <td>{{ flight.departure_location }} → {{ flight.arrival_location }}</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- First, add a hidden div to store flight data -->
+<div id="flightData" 
+    data-flights='[
+        {% for flight in flights %}
+            {
+                "lat": "{{ flight.current_latitude|default:'0' }}",
+                "lon": "{{ flight.current_longitude|default:'0' }}",
+                "number": "{{ flight.flight_number }}",
+                "from": "{{ flight.departure_location }}",
+                "to": "{{ flight.arrival_location }}"
+            }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ]'
+    data-api-url="{% url 'aircraft_data:flight_positions' %}">
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize map
+    var map = L.map('map').setView([20.5937, 78.9629], 4);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Get flight data from the hidden div
+    var flightDataElement = document.getElementById('flightData');
+    var flights = JSON.parse(flightDataElement.dataset.flights);
+    var apiUrl = flightDataElement.dataset.apiUrl;
+
+    // Add initial markers
+    flights.forEach(function(flight) {
+        if (flight.lat !== "0" && flight.lon !== "0") {
+            L.marker([Number(flight.lat), Number(flight.lon)])
+                .bindPopup(flight.number + ": " + flight.from + " → " + flight.to)
+                .addTo(map);
+        }
+    });
+
+    // Update function
+    function updateMap() {
+        fetch(apiUrl)
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                // Clear markers
+                map.eachLayer(function(layer) {
+                    if (layer instanceof L.Marker) {
+                        map.removeLayer(layer);
+                    }
+                });
+                // Add new markers
+                Object.keys(data).forEach(function(key) {
+                    var flight = data[key];
+                    L.marker([Number(flight.latitude), Number(flight.longitude)])
+                        .bindPopup(flight.flight_number)
+                        .addTo(map);
+                });
+            });
+    }
+
+    // Update every 30 seconds
+    setInterval(updateMap, 30000);
+});
+</script>
+{% endblock %} 

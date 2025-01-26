@@ -1,0 +1,27 @@
+{% extends 'aircraft_data/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Aircraft Fleet</h2>
+    <div class="row">
+        {% for aircraft in aircrafts %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ aircraft.aircraft_id }}</h5>
+                    <p class="card-text">
+                        Model: {{ aircraft.model }}<br>
+                        Manufacturer: {{ aircraft.manufacturer }}<br>
+                        Status: <span class="badge {% if aircraft.status == 'active' %}bg-success{% elif aircraft.status == 'inactive' %}bg-danger{% else %}bg-warning{% endif %}">
+                            {{ aircraft.get_status_display }}
+                        </span>
+                    </p>
+                    <a href="{% url 'aircraft_data:aircraft_detail' aircraft.pk %}" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

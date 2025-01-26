@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Aircraft Data Dashboard</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div id="aircraft-data-table">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Aircraft ID</th>
+                                    <th>Model</th>
+                                    <th>Altitude</th>
+                                    <th>Speed</th>
+                                    <th>Location</th>
+                                    <th>Last Updated</th>
+                                </tr>
+                            </thead>
+                            <tbody id="aircraft-data">
+                                <!-- Data will be populated via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function updateAircraftData() {
+    fetch('/api/aircraft-data/')
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById('aircraft-data');
+            tableBody.innerHTML = '';
+            
+            data.forEach(aircraft => {
+                const row = `
+                    <tr>
+                        <td>${aircraft.aircraft_id}</td>
+                        <td>${aircraft.model}</td>
+                        <td>${aircraft.altitude} ft</td>
+                        <td>${aircraft.speed} knots</td>
+                        <td>${aircraft.latitude}, ${aircraft.longitude}</td>
+                        <td>${new Date(aircraft.last_updated).toLocaleString()}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// Update data every 5 seconds
+setInterval(updateAircraftData, 5000);
+updateAircraftData(); // Initial load
+</script>
+{% endblock %} 

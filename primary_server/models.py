@@ -1,5 +1,26 @@
 from django.db import models
 
+class ServerStatus(models.Model):
+    is_active = models.BooleanField(default=True)
+    last_heartbeat = models.DateTimeField(auto_now=True)
+    server_type = models.CharField(max_length=20, choices=[
+        ('PRIMARY', 'Primary Server'),
+        ('BACKUP', 'Backup Server')
+    ])
+    
+    class Meta:
+        verbose_name_plural = "Server Statuses"
+
+class AircraftData(models.Model):
+    aircraft_id = models.CharField(max_length=50, unique=True)
+    model = models.CharField(max_length=100)
+    altitude = models.FloatField()
+    speed = models.FloatField()
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
 class Aircraft(models.Model):
     registration = models.CharField(max_length=10, unique=True)
     model = models.CharField(max_length=50)
