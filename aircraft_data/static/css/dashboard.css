@@ -1,0 +1,28 @@
+.dashboard {
+    padding: 20px;
+}
+
+.flight-section {
+    margin-bottom: 30px;
+}
+
+.flight-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.flight-card {
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background: white;
+}
+
+.flight-card.maintenance {
+    border-left: 4px solid orange;
+}
+
+.flight-card.inactive {
+    border-left: 4px solid red;
+} 

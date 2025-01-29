@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'primary_config.urls'
+ROOT_URLCONF = 'primary_server.primary_config.urls'
 
 TEMPLATES = [
     {
@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'primary_config.wsgi.application'
+WSGI_APPLICATION = 'primary_server.primary_config.wsgi.application'
 
 
 # Database
@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'primary_config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / "db.sqlite3",
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

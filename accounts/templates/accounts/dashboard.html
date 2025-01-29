@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>Flight Dashboard</h1>
+    
+    <div class="flight-section">
+        <h2>Active Flights</h2>
+        <div class="flight-list">
+            {% for flight in active_flights %}
+            <div class="flight-card">
+                <h3>{{ flight.flight_number }}</h3>
+                <p>From: {{ flight.departure }}</p>
+                <p>To: {{ flight.arrival }}</p>
+                <p>Departure: {{ flight.departure_time }}</p>
+                <p>Status: {{ flight.status }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="flight-section">
+        <h2>Maintenance Flights</h2>
+        <div class="flight-list">
+            {% for flight in maintenance_flights %}
+            <div class="flight-card maintenance">
+                <h3>{{ flight.flight_number }}</h3>
+                <p>From: {{ flight.departure }}</p>
+                <p>To: {{ flight.arrival }}</p>
+                <p>Status: {{ flight.status }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="flight-section">
+        <h2>Inactive Flights</h2>
+        <div class="flight-list">
+            {% for flight in inactive_flights %}
+            <div class="flight-card inactive">
+                <h3>{{ flight.flight_number }}</h3>
+                <p>From: {{ flight.departure }}</p>
+                <p>To: {{ flight.arrival }}</p>
+                <p>Status: {{ flight.status }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

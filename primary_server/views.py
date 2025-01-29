@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Flight, Booking, AircraftData, ServerStatus
+from .models import Flight, Booking, AircraftData, ServerStatus, Aircraft, FlightData, SensorData, MaintenanceLog
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -7,7 +7,8 @@ from rest_framework.decorators import api_view
 from .serializers import AircraftDataSerializer
 import json
 from django.http import JsonResponse
-from .utils import sync_to_backup_server  # Ensure this import is included
+from django.utils import timezone
+from .utils import sync_to_backup_server
 
 @login_required
 def book_flight(request, flight_id):
@@ -81,3 +82,95 @@ def flight_positions(request):
         ]
     }
     return JsonResponse(data)
+
+def home(request):
+    context = {
+        'active_flights': Flight.objects.all(),
+        'active_flights_count': Flight.objects.count(),
+        'total_aircraft': Aircraft.objects.count(),
+        'total_routes': 0,  # We'll add this back later
+    }
+    return render(request, 'primary_server/home.html', context)
+
+def flights(request):
+    context = {
+        'flights': Flight.objects.all()
+    }
+    return render(request, 'primary_server/flights.html', context)
+
+def aircraft(request):
+    context = {
+        'aircraft_list': Aircraft.objects.all()
+    }
+    return render(request, 'primary_server/aircraft.html', context)
+
+def aircraft_list(request):
+    aircraft = Aircraft.objects.all()
+    data = [{
+        'id': a.aircraft_id,
+        'model': a.model,
+        'manufacturer': a.manufacturer,
+        'year': a.year_manufactured
+    } for a in aircraft]
+    return JsonResponse({'aircraft': data})
+
+def aircraft_detail(request, aircraft_id):
+    try:
+        aircraft = Aircraft.objects.get(aircraft_id=aircraft_id)
+        data = {
+            'id': aircraft.aircraft_id,
+            'model': aircraft.model,
+            'manufacturer': aircraft.manufacturer,
+            'year': aircraft.year_manufactured,
+            'flight_count': aircraft.flightdata_set.count(),
+            'sensor_count': aircraft.sensordata_set.count(),
+            'maintenance_count': aircraft.maintenancelog_set.count(),
+        }
+        return JsonResponse(data)
+    except Aircraft.DoesNotExist:
+        return JsonResponse({'error': 'Aircraft not found'}, status=404)
+
+def flight_data_list(request):
+    flights = FlightData.objects.all()
+    data = [{
+        'flight_number': f.flight_number,
+        'aircraft': f.aircraft.aircraft_id,
+        'departure': f.departure_time.isoformat(),
+        'arrival': f.arrival_time.isoformat() if f.arrival_time else None,
+    } for f in flights]
+    return JsonResponse({'flights': data})
+
+def sensor_data_list(request):
+    sensors = SensorData.objects.all()
+    data = [{
+        'aircraft': s.aircraft.aircraft_id,
+        'type': s.sensor_type,
+        'value': s.value,
+        'timestamp': s.timestamp.isoformat(),
+    } for s in sensors]
+    return JsonResponse({'sensor_data': data})
+
+def maintenance_log_list(request):
+    logs = MaintenanceLog.objects.all()
+    data = [{
+        'aircraft': l.aircraft.aircraft_id,
+        'type': l.maintenance_type,
+        'date': l.date.isoformat(),
+        'description': l.description,
+    } for l in logs]
+    return JsonResponse({'maintenance_logs': data})
+
+def sync_to_backup_server(instance):
+    """
+    Synchronize aircraft data to backup server
+    Args:
+        instance: AircraftData instance to be synced
+    """
+    try:
+        # Add your sync logic here
+        # This could involve making API calls to backup server
+        # or using FTP to transfer data
+        pass
+    except Exception as e:
+        print(f"Error syncing to backup server: {e}")
+        # Consider proper error handling/logging here

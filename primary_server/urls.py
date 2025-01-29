@@ -4,12 +4,11 @@ from . import views
 app_name = 'primary_server'
 
 urlpatterns = [
-    path('', views.main_portal, name='main_portal'),
-    path('add/', views.add_aircraft_page, name='add_aircraft_page'),
-    path('aircraft/', views.get_all_aircraft, name='get_all_aircraft'),
-    path('add/submit/', views.add_aircraft, name='add_aircraft'),
-    path('delete/<str:aircraft_id>/', views.delete_aircraft, name='delete_aircraft'),
-    path('status/', views.system_status, name='system_status'),
-    path('health/', views.health_check, name='health_check'),
-    path('api/flight-positions/', views.flight_positions, name='flight_positions'),
+    path('', views.home, name='home'),
+    path('flights/', views.flights, name='flights'),
+    path('aircraft/', views.aircraft, name='aircraft'),
+    path('aircraft/<str:aircraft_id>/', views.aircraft_detail, name='aircraft_detail'),
+    path('flight-data/', views.flight_data_list, name='flight_data_list'),
+    path('sensor-data/', views.sensor_data_list, name='sensor_data_list'),
+    path('maintenance-logs/', views.maintenance_log_list, name='maintenance_log_list'),
 ] 
