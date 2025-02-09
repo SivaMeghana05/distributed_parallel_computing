@@ -1,0 +1,37 @@
+{% extends 'primary_server/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4">All Flights</h1>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Flight Number</th>
+                        <th>Aircraft</th>
+                        <th>Departure</th>
+                        <th>Arrival</th>
+                        <th>Altitude</th>
+                        <th>Status</th>
+                        <th>Departure Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for flight in flights %}
+                    <tr>
+                        <td>{{ flight.flight_number }}</td>
+                        <td>{{ flight.aircraft.model }}</td>
+                        <td>{{ flight.departure }}</td>
+                        <td>{{ flight.arrival }}</td>
+                        <td>{{ flight.altitude }} ft</td>
+                        <td>{{ flight.status }}</td>
+                        <td>{{ flight.departure_time }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %} 

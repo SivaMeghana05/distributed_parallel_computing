@@ -1,0 +1,100 @@
+{% extends 'aircraft_data/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2>Maintenance Dashboard</h2>
+        </div>
+    </div>
+
+    <!-- Status Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Scheduled</h5>
+                    <h2>{{ status_counts.scheduled }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">In Progress</h5>
+                    <h2>{{ status_counts.in_progress }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Completed</h5>
+                    <h2>{{ status_counts.completed }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Overdue</h5>
+                    <h2>{{ status_counts.overdue }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Maintenance Schedule Table -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Maintenance Schedule</h5>
+                    <a href="{% url 'admin:aircraft_data_maintenanceschedule_add' %}" class="btn btn-primary btn-sm">
+                        Schedule New Maintenance
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Aircraft</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>Scheduled Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for schedule in maintenance_schedules %}
+                                <tr>
+                                    <td>{{ schedule.aircraft.aircraft_id }} - {{ schedule.aircraft.model }}</td>
+                                    <td>{{ schedule.get_maintenance_type_display }}</td>
+                                    <td>{{ schedule.description }}</td>
+                                    <td>{{ schedule.scheduled_date }}</td>
+                                    <td>
+                                        <span class="badge {% if schedule.status == 'completed' %}bg-success{% elif schedule.status == 'in_progress' %}bg-warning{% elif schedule.status == 'scheduled' %}bg-primary{% else %}bg-danger{% endif %}">
+                                            {{ schedule.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'admin:aircraft_data_maintenanceschedule_change' schedule.id %}" class="btn btn-sm btn-primary">Edit</a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No maintenance schedules found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

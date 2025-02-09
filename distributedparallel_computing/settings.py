@@ -31,17 +31,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'primary_server.apps.PrimaryServerConfig',
+    'backup_server.apps.BackupServerConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'aircraft_data',
-    'apscheduler',
-    'accounts',
     'rest_framework',
-    'primary_server_app',
 ]
 
 MIDDLEWARE = [

@@ -27,24 +27,23 @@ class Aircraft(models.Model):
         return f"{self.aircraft_id} - {self.model}"
 
 class Flight(models.Model):
-    flight_number = models.CharField(max_length=10)
-    aircraft = models.ForeignKey(Aircraft, on_delete=models.CASCADE)
-    departure_location = models.CharField(max_length=100)
-    arrival_location = models.CharField(max_length=100)
-    departure_time = models.DateTimeField()
-    arrival_time = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(max_length=20, choices=[
+    STATUS_CHOICES = [
         ('active', 'Active'),
-        ('completed', 'Completed'),
-        ('cancelled', 'Cancelled'),
-        ('inactive', 'Inactive')
-    ])
-    current_latitude = models.FloatField(null=True, blank=True)
-    current_longitude = models.FloatField(null=True, blank=True)
-    current_altitude = models.IntegerField(null=True, blank=True)
+        ('inactive', 'Inactive'),
+        ('maintenance', 'Maintenance')
+    ]
+    
+    flight_number = models.CharField(max_length=20)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    departure = models.CharField(max_length=100)
+    arrival = models.CharField(max_length=100)
+    departure_time = models.DateTimeField()
+    arrival_time = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.flight_number}: {self.departure_location} → {self.arrival_location}"
+        return f"{self.flight_number} - {self.status}"
 
 class FlightTrack(models.Model):
     aircraft = models.ForeignKey(Aircraft, on_delete=models.CASCADE, related_name='flight_tracks')

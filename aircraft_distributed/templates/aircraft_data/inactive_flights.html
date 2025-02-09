@@ -1,0 +1,70 @@
+{% extends 'aircraft_data/base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Inactive Flights</h2>
+                <span class="badge bg-secondary">Total: {{ total_inactive }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Flight Number</th>
+                                    <th>Aircraft</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Departure Time</th>
+                                    <th>Arrival Time</th>
+                                    <th>Last Known Position</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for flight in inactive_flights %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'aircraft_data:flight_detail' flight.id %}">
+                                            {{ flight.flight_number }}
+                                        </a>
+                                    </td>
+                                    <td>{{ flight.aircraft.model }}</td>
+                                    <td>{{ flight.departure_location }}</td>
+                                    <td>{{ flight.arrival_location }}</td>
+                                    <td>{{ flight.departure_time|date:"Y-m-d H:i" }}</td>
+                                    <td>{{ flight.arrival_time|date:"Y-m-d H:i"|default:"--" }}</td>
+                                    <td>
+                                        {% if flight.current_latitude and flight.current_longitude %}
+                                            {{ flight.current_latitude|floatformat:2 }}, 
+                                            {{ flight.current_longitude|floatformat:2 }}
+                                        {% else %}
+                                            --
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">Inactive</span>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="8" class="text-center">No inactive flights found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
