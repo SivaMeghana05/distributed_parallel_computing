@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flight List - Backup Server</title>
+</head>
+<body>
+    <div class="container mt-4">
+        <h3>Active Flights (Backup Server)</h3>
+        <div class="mt-3">
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th>Flight</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for flight in active_flights %}
+                    <tr>
+                        <td style="border-bottom: 1px solid #dee2e6;">
+                            <a href="#" style="text-decoration: none; color: black;">
+                                {{ flight.flight_number }}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html> 77

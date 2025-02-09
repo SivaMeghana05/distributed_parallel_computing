@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def book_flight(request, flight_id):
-    flight = Flight.objects.get(id=flight_id)
+    flight = get_object_or_404(Flight, id=flight_id)
 
     if request.method == 'POST':
         seat_number = request.POST.get('seat_number')
@@ -24,13 +24,15 @@ def flight_detail(request, flight_id):
     return render(request, 'aircraft_data/flight_detail.html', {'flight': flight})
 
 def flight_list(request):
-    query = request.GET.get('q')
-    if query:
-        flights = Flight.objects.filter(departure_location__icontains=query) | Flight.objects.filter(arrival_location__icontains=query)
-    else:
-        flights = Flight.objects.all()
-    return render(request, 'aircraft_data/flight_list.html', {'flights': flights})
+    active_flights = Flight.objects.filter(status='active')
+    inactive_flights = Flight.objects.filter(status='inactive')
+    context = {
+        'active_flights': active_flights,
+        'inactive_flights': inactive_flights
+    }
+    return render(request, 'aircraft_data/flight_list.html', context)
 
+@login_required
 def booking_confirmation(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
     return render(request, 'aircraft_data/booking_confirmation.html', {'booking': booking})
@@ -39,4 +41,4 @@ def booking_confirmation(request, booking_id):
 def cancel_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id, user=request.user)
     booking.delete()
-    return redirect('booking_cancellation_confirmation')  # Create a confirmation page for cancellation 
+    return render(request, 'aircraft_data/cancellation_confirmation.html') 
